@@ -1,0 +1,5 @@
+Django~=4.2.18
+django-admin-rangefilter~=0.13.2
+pyTelegramBotAPI~=4.26.0
+python-dotenv~=1.0.1
+psycopg2-binary~=2.9.10

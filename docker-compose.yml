@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command:
+      sh -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver --insecure 0.0.0.0:8000"
+    volumes:
+      - .:/app
+      - static_volume:/app/static
+      - media_volume:/app/media
+    expose:
+      - "8000"
+    environment:
+      - DEBUG=False
+    ports:
+      - "8000:8000"
+
+volumes:
+  static_volume:
+  media_volume:

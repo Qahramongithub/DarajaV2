@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahsulotlar Ro'yxati</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f9f9f9;
+            height: 100vh;
+        }
+
+        .table-container {
+            border: 2px solid #ddd; /* Borderni kattalashtirish */
+            border-radius: 10px; /* Burchaklarni yumshatish */
+            padding: 20px; /* Ichki bo'shliqni oshirish */
+            background-color: #fff;
+            width: 90%; /* Jadvalning kengligini oshirish */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 2px solid #ddd; /* Borderni qalinroq qilish */
+            padding: 15px; /* Ichki bo'shliqni oshirish */
+            text-align: center;
+            font-size: 18px; /* Matn hajmini kattalashtirish */
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+            font-size: 20px; /* Sarlavhalarni kattalashtirish */
+        }
+
+        .sell-button {
+            padding: 10px 20px; /* Tugma o'lchamini oshirish */
+            font-size: 18px; /* Tugmadagi matn hajmini kattalashtirish */
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 6px; /* Tugma burchaklarini yumshatish */
+            cursor: pointer;
+        }
+
+        .sell-button:hover {
+            background-color: #0056b3; /* Tugma ustiga olib borilganda rang */
+        }
+
+        .btn {
+            display: inline-block; /* Inline elementni blok ko‘rinishga keltiradi */
+            padding: 10px 20px; /* Ichki bo‘shliq */
+            font-size: 16px; /* Shrift hajmi */
+            color: #fff; /* Matn rangi */
+            background-color: #007bff; /* Tugmacha foni (ko‘k rang) */
+            text-decoration: none; /* Underline olib tashlash */
+            border: none; /* Chegara yo‘q */
+            border-radius: 5px; /* Burchaklarni yumaloqlash */
+            transition: background-color 0.3s ease; /* Hover effekti */
+        }
+
+        .btn:hover {
+            background-color: #0056b3; /* Hover paytida foni o‘zgaradi */
+        }
+
+        .btn:hover {
+            background-color: #0056b3; /* Hover paytida foni o‘zgaradi */
+        }
+
+        .center-title {
+            text-align: center; /* Matnni gorizontal o‘rtalash */
+            margin-bottom: 20px; /* Pastki bo‘shliq */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="table-container">
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <a href="{% url 'product_create' %}" class="btn">Yarm Tayor Maxsulot qo'shish</a>
+        <a href="{% url 'admin:index' %}" class="btn">Admin Panel</a>
+        <a href="{% url 'product_list' %}" class="btn">Yarm Tayor Maxsulotlar ro'yxati</a>
+        <a href="{% url 'finish_product_create' %}" class="btn">Tayor maxsulot qo'shish</a>
+    </div>
+    <h1 class="center-title">Yarm Tayor Maxsulotlar Ro'yxati</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Nomi</th>
+            <th>Soni</th>
+            <th>Amal</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for product in finish_products %}
+            <tr>
+                <td>{{ product.nomi.nomi }}</td>
+
+                <td id="quantity">{{ product.soni }}</td>
+
+                <td>
+                    <button class="sell-button" data-product-id="{{ product.id }}">Chiqib ketdi</button>
+                </td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+    document.querySelectorAll('.sell-button').forEach(button => {
+        button.addEventListener('click', function () {
+            const row = this.closest('tr'); // Joriy qatorni olish
+            const quantityElement = row.querySelector('#quantity'); // Miqdor elementini olish
+            const productName = row.querySelector('td').textContent.trim(); // Mahsulot nomi
+            const productPrice = row.querySelectorAll('td')[1].textContent.trim(); // Mahsulot narxi
+            const productId = this.dataset.productId; // Mahsulot ID'si (Tugma atributida saqlangan)
+            let quantity = parseInt(quantityElement.textContent, 10); // Hozirgi miqdor
+
+            // Kamaytirish miqdorini foydalanuvchidan so'rash
+            const decreaseAmount = parseInt(prompt(`Mahsulot sonini qancha kamaytirmoqchisiz? Hozirda: ${quantity}`), 10);
+            if (quantity === 0) {
+                alert('Mahsulot tugadi!');
+                row.remove();  // Qatorni jadvaldan olib tashlash
+            }
+            // Validatsiya
+            if (isNaN(decreaseAmount) || decreaseAmount <= 0) {
+                alert('Iltimos, musbat son kiriting!');
+                return;
+            }
+
+            if (decreaseAmount > quantity) {
+                alert('Kiritilgan son mavjud miqdordan oshib ketdi!');
+                return;
+            }
+
+            // AJAX so'rovini yuborish
+            fetch('/sell_finish_product/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}' // Django uchun CSRF token
+                },
+                body: JSON.stringify({
+                    product_id: productId, // Mahsulot ID
+                    decrease_amount: decreaseAmount // Kamaytirish miqdori
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Miqdorni yangilash
+                        quantity -= decreaseAmount;
+                        quantityElement.textContent = quantity;
+
+                        if (quantity === 0) {
+                            alert('Mahsulot tugadi!');
+                            this.disabled = true; // Tugmani o'chirish
+                        }
+                    } else {
+                        alert(data.error || 'Xatolik yuz berdi.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Xatolik:', error);
+                    alert('Server bilan ulanishda muammo.');
+                });
+        });
+    });
+
+</script>
+</body>
+</html>

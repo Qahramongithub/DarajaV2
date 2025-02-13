@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+
+<html lang="uz" dir="ltr">
+<head>
+    <style>
+        .button {
+            border: none;
+            color: white;
+            padding: 8px 16px; /* Kichikroq padding */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 11px; /* Kichikroq font hajmi */
+            margin: 2px 1px; /* Kichikroq margin */
+            transition-duration: 0.4s;
+            cursor: pointer;
+        }
+
+        .button1 {
+            background-color: white;
+            color: black;
+            border: 2px solid #04AA6D;
+        }
+
+        .button1:hover {
+            background-color: #04AA6D;
+            color: white;
+        }
+
+
+        /* Asosiy uslublar */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        .sell-button:hover {
+            background-color: #218838;
+        }
+
+        /* Navbar uslublari */
+        .navbar {
+            background-color: #007bff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            margin: 0;
+        }
+
+        .navbar .btn {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #0056b3;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar .btn:hover {
+            background-color: #003f7f;
+        }
+
+        /* Jadvalning joylashuvi */
+        .table-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #fff;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        /* Tugma uslublari */
+        .sell-button {
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sell-button:hover {
+            background-color: #218838;
+        }
+
+        /* Tugma bosilgandan keyingi holat */
+        .sell-button.clicked {
+            background-color: #fff;
+            color: #000;
+            border: 2px solid #000;
+        }
+
+        .sell-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .sell-button2 {
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sell-button2:hover {
+            background-color: #218838;
+        }
+
+        /* Tugma bosilgandan keyingi holat */
+        .sell-button2.clicked {
+            background-color: #fff;
+            color: #000;
+            border: 2px solid #000;
+        }
+
+        .sell-button2:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+    <link rel="stylesheet" href="/static/admin/css/base.css">
+
+    <link rel="stylesheet" href="/static/admin/css/dark_mode.css">
+    <script src="/static/admin/js/theme.js" defer></script>
+
+
+    <link rel="stylesheet" href="/static/admin/css/nav_sidebar.css">
+    <script src="/static/admin/js/nav_sidebar.js" defer></script>
+
+
+    <link rel="stylesheet" href="/static/admin/css/changelists.css">
+
+
+    <script src="/admin/jsi18n/"></script>
+
+
+    <script src="/static/admin/js/vendor/jquery/jquery.js"></script>
+    <script src="/static/admin/js/jquery.init.js"></script>
+    <script src="/static/admin/js/core.js"></script>
+    <script src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+    <script src="/static/admin/js/actions.js"></script>
+    <script src="/static/admin/js/urlify.js"></script>
+    <script src="/static/admin/js/prepopulate.js"></script>
+    <script src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
+    <script src="/static/admin/js/filters.js" defer></script>
+
+
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="/static/admin/css/responsive.css">
+
+
+    <meta name="robots" content="NONE,NOARCHIVE">
+</head>
+
+<body class=" app-apps model-finishproducthistory change-list"
+      data-admin-utc-offset="0">
+<a href="#content-start" class="skip-to-content-link">Skip to main content</a>
+<!-- Container -->
+<div id="container">
+
+
+    <!-- Header -->
+
+    <div id="header">
+        <div id="branding">
+
+            <h1 id="site-name"><a href="/admin/"></a></h1>
+
+
+        </div>
+
+
+        <div id="user-tools">
+
+
+            <a href="/admin/" class="button button1">Admin</a>
+            <a href="/product_create" class="button button1">1 - Sklad</a>
+            <a href="/finish_product_create" class="button button1">2 - Sklad</a>
+            <a href="{% url 'product_list' %}" class="button button1">Maxsulotlar jadvali</a>
+
+            <button class="theme-toggle">
+                <div class="visually-hidden theme-label-when-auto">Toggle theme (current theme: auto)</div>
+                <div class="visually-hidden theme-label-when-light">Toggle theme (current theme: light)</div>
+                <div class="visually-hidden theme-label-when-dark">Toggle theme (current theme: dark)</div>
+                <svg aria-hidden="true" class="theme-icon-when-auto">
+                    <use xlink:href="#icon-auto"/>
+                </svg>
+                <svg aria-hidden="true" class="theme-icon-when-dark">
+                    <use xlink:href="#icon-moon"/>
+                </svg>
+                <svg aria-hidden="true" class="theme-icon-when-light">
+                    <use xlink:href="#icon-sun"/>
+                </svg>
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+    <!-- END Header -->
+
+    <nav aria-label="Breadcrumbs">
+
+        <div class="breadcrumbs">
+
+        </div>
+
+    </nav>
+
+
+    <div class="main" id="main">
+
+
+        <div id="content-start" class="content" tabindex="-1">
+
+
+            <div id="content-main">
+
+                <ul class="object-tools">
+
+
+                </ul>
+
+                <div id="content" class>
+                    <div style="display: flex; justify-content: center; gap: 10px;">
+
+                        <div class="table-container" style="width: 780px;">
+                            <h1>1 - Sklad</h1>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>N</th>
+                                    <th>Nomi</th>
+                                    <th>Narxi</th>
+                                    <th>Soni</th>
+                                    <th>Amal</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for product in products %}
+                                    <tr {% if product.soni < 3 %}style="background-color: red;"{% endif %}>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ product.nomi.nomi }}</td>
+                                        <td>{{ product.narxi }}</td>
+                                        <td id="quantity">{{ product.soni }}</td>
+                                        <td>
+                                            <button class="sell-button" data-product-id="{{ product.pk }}">Chiqib
+                                                ketdi
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-container" style="width: 780px;">
+                            <h1>2 - Sklad</h1>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>N</th>
+                                    <th>Nomi</th>
+                                    <th>Narxi</th>
+                                    <th>Soni</th>
+                                    <th>Amal</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for product in finish_product %}
+
+                                    <tr {% if product.soni < 3 %}style="background-color: red;"{% endif %}>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ product.nomi.nomi }}</td>
+                                        <td>{{ product.narxi }}</td>
+                                        <td id="quantity">{{ product.soni }}</td>
+                                        <td>
+                                            <button class="sell-button2" data-product-id="{{ product.pk }}">Chiqib ketdi
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <br class="clear">
+        </div>
+        <!-- END Content -->
+        <div id="footer"></div>
+    </div>
+</div>
+<!-- END Container -->
+<script>
+    document.querySelectorAll('.sell-button').forEach(button => {
+        button.addEventListener('click', function () {
+            const row = this.closest('tr');
+            const quantityElement = row.querySelector('#quantity');
+            const productId = this.dataset.productId;
+            let quantity = parseInt(quantityElement.textContent, 10);
+
+            if (quantity === 0) {
+                alert('Mahsulot tugadi!');
+                row.remove();
+            }
+
+            const decreaseAmount = parseInt(prompt(`Mahsulot sonini qancha kamaytirmoqchisiz? Hozirda: ${quantity}`), 10);
+            if (isNaN(decreaseAmount) || decreaseAmount <= 0) {
+                alert('Iltimos, musbat son kiriting!');
+                return;
+            }
+
+            if (decreaseAmount > quantity) {
+                alert('Kiritilgan son mavjud miqdordan oshib ketdi!');
+                return;
+            }
+
+            fetch('/sell-product/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    decrease_amount: decreaseAmount
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        quantity -= decreaseAmount;
+                        quantityElement.textContent = quantity;
+
+                        if (quantity === 0) {
+                            alert('Mahsulot tugadi!');
+                            this.disabled = true;
+                        }
+                        this.classList.add('clicked');
+                    } else {
+                        alert(data.error || 'Xatolik yuz berdi.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Xatolik:', error);
+                    alert('Server bilan ulanishda muammo.');
+                });
+        });
+    });
+</script>
+<script>
+    document.querySelectorAll('.sell-button2').forEach(button => {
+        button.addEventListener('click', function () {
+            const row = this.closest('tr');
+            const quantityElement = row.querySelector('#quantity');
+            const productId = this.dataset.productId;
+            let quantity = parseInt(quantityElement.textContent, 10);
+
+            if (quantity === 0) {
+                alert('Mahsulot tugadi!');
+                row.remove();
+            }
+
+            const decreaseAmount = parseInt(prompt(`Mahsulot sonini qancha kamaytirmoqchisiz? Hozirda: ${quantity}`), 10);
+            if (isNaN(decreaseAmount) || decreaseAmount <= 0) {
+                alert('Iltimos, musbat son kiriting!');
+                return;
+            }
+
+            if (decreaseAmount > quantity) {
+                alert('Kiritilgan son mavjud miqdordan oshib ketdi!');
+                return;
+            }
+
+            fetch('/sell_finish_product/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    decrease_amount: decreaseAmount
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        quantity -= decreaseAmount;
+                        quantityElement.textContent = quantity;
+
+                        if (quantity === 0) {
+                            alert('Mahsulot tugadi!');
+                            this.disabled = true;
+                        }
+                        this.classList.add('clicked');
+                    } else {
+                        alert(data.error || 'Xatolik yuz berdi.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Xatolik:', error);
+                    alert('Server bilan ulanishda muammo.');
+                });
+        });
+    });
+</script>
+<!-- SVGs -->
+<svg xmlns="http://www.w3.org/2000/svg" class="base-svgs">
+    <symbol viewBox="0 0 24 24" width="1rem" height="1rem" id="icon-auto">
+        <path d="M0 0h24v24H0z" fill="currentColor"/>
+        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2V4a8 8 0 1 0 0 16z"/>
+    </symbol>
+    <symbol viewBox="0 0 24 24" width="1rem" height="1rem" id="icon-moon">
+        <path d="M0 0h24v24H0z" fill="currentColor"/>
+        <path d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2h.1A6.979 6.979 0 0 0 10 7zm-6 5a8 8 0 0 0 15.062 3.762A9 9 0 0 1 8.238 4.938 7.999 7.999 0 0 0 4 12z"/>
+    </symbol>
+    <symbol viewBox="0 0 24 24" width="1rem" height="1rem" id="icon-sun">
+        <path d="M0 0h24v24H0z" fill="currentColor"/>
+        <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/>
+    </symbol>
+</svg>
