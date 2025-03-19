@@ -1,5 +1,7 @@
 from django.contrib import admin
+from django.contrib.admin.widgets import AdminTextInputWidget
 from django.contrib.auth.models import User, Group
+from django.core.exceptions import ValidationError
 from django.db.models import Sum, F
 from django.template.response import TemplateResponse  # TemplateResponse import qilish
 from django.utils.html import format_html
@@ -35,29 +37,35 @@ def update_total_price(queryset):
 # ===================== 1 - Product History =======================
 @admin.register(ProductHistory, site=custom_admin_site)
 class ProductHistoryAdmin(admin.ModelAdmin):
-    list_display = ('get_nomi', 'soni', 'status_button', 'narxi')
+    list_display = ('get_nomi', 'soni', 'status_button', 'narxi', 'status',)
     list_filter = [
         ("created_at", DateRangeFilter),
         'status',
         'nomi',
     ]
+    list_editable = ('status',)
+    search_fields = ('nomi__nomi',)
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
+
         response = super().changelist_view(request, extra_context=extra_context)
 
-        # response orqali queryset olish
-        queryset = response.context_data['cl'].queryset
-        total_price = update_total_price(queryset)
+        if not isinstance(response, TemplateResponse):
+            return response  # Redirect bo‘lsa, bevosita response qaytaramiz
 
-        # Umumiy narxni qo'shish
-        extra_context['title'] = f"Umumiy mahsulotlar narxi: {total_price} so'm"
+        # 🔹 `cl` obyekt mavjudligini tekshiramiz
+        cl = response.context_data.get('cl', None)
+        if cl is not None:
+            queryset = cl.queryset
+            total_price = update_total_price(queryset)
+            extra_context['title'] = f"Umumiy mahsulotlar narxi: {total_price:,} so'm"
 
-        # Agar response TemplateResponse bo'lsa, context_data ga o'zgartirish kiritamiz
-        if isinstance(response, TemplateResponse):
+            # 🔹 `context_data` ni yangilaymiz
             response.context_data.update(extra_context)
 
         return response
+
 
     def get_nomi(self, obj):
         return obj.nomi.nomi
@@ -68,7 +76,7 @@ class ProductHistoryAdmin(admin.ModelAdmin):
         color = {
             "qabul": "blue",
             "chiqdi": "green",
-        }.get(obj.status.lower(), "gray")  # Default rang - gray
+        }.get(obj.status.lower(), "gray")
 
         return format_html(
             '<button style="background-color: {}; color: white; border: none; padding: 5px 10px;">{}</button>',
@@ -80,9 +88,6 @@ class ProductHistoryAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False  # Yangi mahsulot qo'shishni cheklash
-
-    def has_delete_permission(self, request, obj=None):
-        return False
 
 
 # ===================== 2 - Finish Product History =======================
@@ -98,13 +103,22 @@ class FinishProductHistoryAdmin(admin.ModelAdmin):
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
+
+        # 🔹 Super klassdan chaqiramiz
         response = super().changelist_view(request, extra_context=extra_context)
 
-        # Agar response TemplateResponse bo'lsa, context_data-ni yangilash
-        if isinstance(response, TemplateResponse):
-            queryset = response.context_data['cl'].queryset
+        # 🔥 HttpResponseRedirect bo‘lsa, context_data mavjud emas
+        if not isinstance(response, TemplateResponse):
+            return response  # Redirect bo‘lsa, bevosita response qaytaramiz
+
+        # 🔹 `cl` obyekt mavjudligini tekshiramiz
+        cl = response.context_data.get('cl', None)
+        if cl is not None:
+            queryset = cl.queryset
             total_price = update_total_price(queryset)
-            extra_context['title'] = f"Umumiy mahsulotlar narxi: {total_price} so'm"
+            extra_context['title'] = f"Umumiy mahsulotlar narxi: {total_price:,} so'm"
+
+            # 🔹 `context_data` ni yangilaymiz
             response.context_data.update(extra_context)
 
         return response
@@ -114,12 +128,12 @@ class FinishProductHistoryAdmin(admin.ModelAdmin):
 
     get_nomi.short_description = 'Nomi'
 
-    def formatted_date(self, obj):
+    def formatted_date(self, obj):  # sanani formatlash
         return obj.created_at.strftime('%Y-%m-%d')
 
     formatted_date.short_description = "Sana"
 
-    def status_button(self, obj):
+    def status_button(self, obj):  # statuslarga rang berilgan
         color = {
             "qabul": "blue",
             "chiqdi": "green",
@@ -135,8 +149,6 @@ class FinishProductHistoryAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False  # Yangi mahsulot qo'shishni cheklash
-    def has_delete_permission(self, request, obj=None):
-        return False
 
 
 # ===================== 3 - Category va FinishCategory =======================
@@ -151,5 +163,5 @@ class FinishCategoryAdmin(admin.ModelAdmin):
 
 
 # ===================== Unregister Django Default Users =======================
-admin.site.unregister(User)
-admin.site.unregister(Group)
+admin.site.unregister(User)  # django user olib tashlangan
+admin.site.unregister(Group)  # django group olib tashlangan

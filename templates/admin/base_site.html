@@ -16,20 +16,20 @@
             <a href="/product_create" class="button button1">1 - Sklad</a>
             <a href="/finish_product_create" class="button button1">2 - Sklad</a>
             <a href="/" class="button button1">Maxsulotlar jadvali</a>
+            <form id="logout-form" method="post" action="/admin/logout/">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="NvtCwyr1XfihQtPCnRFkrrddlikRUeGYS15WCZrrkJl0pudSodtlbRgo2fLl6rqU">
+                    <button type="submit">Log out</button>
+                </form>
+
 
             <button class="theme-toggle">
                 <div class="visually-hidden theme-label-when-auto">Toggle theme (current theme: auto)</div>
                 <div class="visually-hidden theme-label-when-light">Toggle theme (current theme: light)</div>
                 <div class="visually-hidden theme-label-when-dark">Toggle theme (current theme: dark)</div>
                 <svg aria-hidden="true" class="theme-icon-when-auto">
-                    <use xlink:href="#icon-auto"/>
-                </svg>
-                <svg aria-hidden="true" class="theme-icon-when-dark">
-                    <use xlink:href="#icon-moon"/>
-                </svg>
-                <svg aria-hidden="true" class="theme-icon-when-light">
                     <use xlink:href="#icon-sun"/>
                 </svg>
+                
             </button>
 
 
