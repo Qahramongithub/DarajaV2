@@ -1,8 +1,10 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
 class Category(models.Model):
     nomi = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = '1 - Sklad Kategoriyasi'
@@ -28,6 +30,7 @@ class Product(models.Model):
 
 class FinishCategory(models.Model):
     nomi = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = '2 - Sklad Kategoriasi'

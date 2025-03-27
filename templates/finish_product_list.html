@@ -103,16 +103,15 @@
         </thead>
         <tbody>
         {% for product in finish_products %}
-            <tr>
-                <td>{{ product.nomi.nomi }}</td>
-
-                <td id="quantity">{{ product.soni }}</td>
-
-                <td>
-                    <button class="sell-button" data-product-id="{{ product.id }}">Chiqib ketdi</button>
-                </td>
-
-            </tr>
+            {% if product.user == request.user %} <!-- Check if the product belongs to the logged-in user -->
+                <tr>
+                    <td>{{ product.nomi.nomi }}</td> <!-- Display product name -->
+                    <td id="quantity">{{ product.soni }}</td> <!-- Display product quantity -->
+                    <td>
+                        <button class="sell-button" data-product-id="{{ product.id }}">Chiqib ketdi</button>
+                    </td>
+                </tr>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table>

@@ -1,10 +1,11 @@
 from django.urls import path
 
 from apps.views import ProductListView, sell_product, ProductFormView, sell_finish_product, \
-    FinishProductFormView
+    FinishProductFormView, AdminFormView
 
 urlpatterns = [
-    path('', ProductListView.as_view(), name='product_list'),
+    path('',AdminFormView.as_view(), name='login'),
+    path('product_list', ProductListView.as_view(), name='product_list'),
     path('sell-product/', sell_product, name='sell_product'),
     path('product_create', ProductFormView.as_view(), name='product_create'),
     path('sell_finish_product/', sell_finish_product, name='sell_finish_product'),

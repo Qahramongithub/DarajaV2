@@ -66,7 +66,6 @@ class ProductHistoryAdmin(admin.ModelAdmin):
 
         return response
 
-
     def get_nomi(self, obj):
         return obj.nomi.nomi
 
@@ -87,7 +86,11 @@ class ProductHistoryAdmin(admin.ModelAdmin):
     status_button.short_description = "Status"
 
     def has_add_permission(self, request):
-        return False  # Yangi mahsulot qo'shishni cheklash
+        return False
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.filter(nomi__user=request.user)
 
 
 # ===================== 2 - Finish Product History =======================
@@ -148,20 +151,41 @@ class FinishProductHistoryAdmin(admin.ModelAdmin):
     status_button.short_description = "Status"
 
     def has_add_permission(self, request):
-        return False  # Yangi mahsulot qo'shishni cheklash
+        return False
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.filter(nomi__user=request.user)
 
 
 # ===================== 3 - Category va FinishCategory =======================
 @admin.register(Category, site=custom_admin_site)
 class CategoryAdmin(admin.ModelAdmin):
-    pass  # Agar kerakli o'zgarishlar bo'lsa, bu yerda sozlash mumkin
+    exclude = ('user',)
+
+    def save_model(self, request, obj, form, change):
+        obj.user = request.user
+        super().save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.filter(user=request.user)
 
 
 @admin.register(FinishCategory, site=custom_admin_site)
 class FinishCategoryAdmin(admin.ModelAdmin):
-    pass  # Agar kerakli o'zgarishlar bo'lsa, bu yerda sozlash mumkin
+    exclude = ('user',)
+
+    def save_model(self, request, obj, form, change):
+        obj.user = request.user
+        super().save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.filter(user=request.user)
+
+    # ===================== Unregister Django Default Users =======================
 
 
-# ===================== Unregister Django Default Users =======================
-admin.site.unregister(User)  # django user olib tashlangan
-admin.site.unregister(Group)  # django group olib tashlangan
+admin.site.unregister(User)
+admin.site.unregister(Group)
